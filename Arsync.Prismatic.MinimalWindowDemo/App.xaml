@@ -1,0 +1,9 @@
+﻿<prism:PrismApplication x:Class="Arsync.Prismatic.MinimalWindowDemo.App"
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	                    xmlns:prism="http://prismlibrary.com/"
+	                    xmlns:sr="clr-namespace:Arsync.SharedResources;assembly=Arsync.SharedResources">
+    <Application.Resources>
+        <sr:SharedResourceDictionary Source="/Arsync.SharedResources;component/Themes/Generic.xaml" />
+    </Application.Resources>
+</prism:PrismApplication>

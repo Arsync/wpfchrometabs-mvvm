@@ -2,12 +2,14 @@
 {
     public class TabReorder
     {
-        public int FromIndex { get; set; }
-        public int ToIndex { get; set; }
-        public TabReorder(int from, int to)
+        public TabReorder(int fromIndex, int toIndex)
         {
-            FromIndex = from;
-            ToIndex = to;
+            FromIndex = fromIndex;
+            ToIndex = toIndex;
         }
+
+        public int FromIndex { get; set; }
+
+        public int ToIndex { get; set; }
     }
 }

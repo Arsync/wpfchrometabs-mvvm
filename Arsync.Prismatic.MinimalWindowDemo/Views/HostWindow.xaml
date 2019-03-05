@@ -1,0 +1,93 @@
+﻿<Window x:Class="Arsync.Prismatic.MinimalWindowDemo.Views.HostWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mvvm="http://prismlibrary.com/"
+        xmlns:vms="clr-namespace:Arsync.Prismatic.MinimalWindowDemo.ViewModels"
+        xmlns:c="clr-namespace:ChromeTabs;assembly=ChromeTabs"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance vms:HostWindowViewModel, IsDesignTimeCreatable=False}"
+        mvvm:ViewModelLocator.AutoWireViewModel="True" MinWidth="720" MinHeight="450" Closed="OnClosed">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" Executed="OnMinimize" />
+        <CommandBinding Command="{x:Static SystemCommands.MaximizeWindowCommand}" Executed="OnMaximize" CanExecute="CanMaximize" />
+        <CommandBinding Command="{x:Static SystemCommands.RestoreWindowCommand}" Executed="OnRestore" CanExecute="CanRestore" />
+        <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" Executed="OnClose" />
+    </Window.CommandBindings>
+
+    <Window.Resources>
+        <Style x:Key="CollapsibleChromeButton" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource ChromeButton}">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Thickness x:Key="ResizeBorderThickness">7</Thickness>
+        <DataTemplate DataType="{x:Type vms:PlainTabViewModel}">
+            <Border Background="White" VerticalAlignment="Top">
+                <TextBlock Margin="20" Text="{Binding TabNumber, StringFormat='Hello from tab #{0}'}" />
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Window.Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource ResourceKey={x:Type Window}}">
+            <Setter Property="BorderBrush" Value="{StaticResource MainBackgroundAccentBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=WindowState}" Value="{x:Static WindowState.Maximized}">
+                    <Setter Property="BorderThickness" Value="{StaticResource ResizeBorderThickness}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+    
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0"
+                      CornerRadius="0"
+                      GlassFrameThickness="0"
+                      NonClientFrameEdges="None"
+                      ResizeBorderThickness="{StaticResource ResizeBorderThickness}"
+                      UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+
+    <Grid Background="{StaticResource MainBackgroundBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <c:ChromeTabControl x:Name="TabControl" Grid.Column="0" Grid.ColumnSpan="6"
+                         ItemsSource="{Binding TabItems}" SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
+                         AddTabCommand="{Binding CreateTabCommand}"
+                         CloseTabCommand="{Binding CloseTabCommand}"
+                         DetachTabCommand="{Binding DetachTabCommand}"
+                         TabTearTriggerDistance="10"
+                         TabDraggedOutsideBounds="OnTabDraggedOutsideBounds"
+                         Background="{StaticResource MainBackgroundAccentBrush}"
+                         TabPersistMode="All">
+            <c:ChromeTabControl.ItemTemplate>
+                <DataTemplate DataType="vms:TabViewModelBase">
+                    <TextBlock Text="{Binding TabHeader}" />
+                </DataTemplate>
+            </c:ChromeTabControl.ItemTemplate>
+        </c:ChromeTabControl>
+        
+        <Button Grid.Column="1" Content="&#xE921;" Command="{x:Static SystemCommands.MinimizeWindowCommand}"
+                Style="{StaticResource ChromeButton}" VerticalAlignment="Top" />
+        <Button Grid.Column="2" Content="&#xE922;" Command="{x:Static SystemCommands.MaximizeWindowCommand}"
+                Style="{StaticResource CollapsibleChromeButton}" VerticalAlignment="Top" />
+        <Button Grid.Column="3" Content="&#xE923;" Command="{x:Static SystemCommands.RestoreWindowCommand}"
+                Style="{StaticResource CollapsibleChromeButton}" VerticalAlignment="Top" />
+        <Button Grid.Column="4" Content="&#xE8BB;" Command="{x:Static SystemCommands.CloseWindowCommand}"
+                Style="{StaticResource ChromeWarningButton}" VerticalAlignment="Top" />
+    </Grid>
+</Window>

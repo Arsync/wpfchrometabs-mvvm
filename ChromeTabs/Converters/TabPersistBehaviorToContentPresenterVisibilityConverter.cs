@@ -9,15 +9,14 @@ namespace ChromeTabs.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            TabPersistBehavior behavior = (TabPersistBehavior)value;
-            switch (behavior)
+            switch (value)
             {
-                default:
-                    return Visibility.Visible;
-                case TabPersistBehavior.All:
-                case TabPersistBehavior.Timed:
+                case TabPersistMode.All:
+                case TabPersistMode.Timed:
                     return Visibility.Collapsed;
 
+                default:
+                    return Visibility.Visible;
             }
         }
 

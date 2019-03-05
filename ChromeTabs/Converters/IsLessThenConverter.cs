@@ -5,19 +5,14 @@ using System.Windows.Data;
 
 namespace ChromeTabs.Converters
 {
-    public class TabPersistBehaviorToItemHolderVisibilityConverter : IValueConverter
+    public class IsLessThanConverter : DependencyObject, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch (value)
-            {
-                case TabPersistMode.All:
-                case TabPersistMode.Timed:
-                    return Visibility.Visible;
+            var param = System.Convert.ToDouble(parameter);
+            var width = System.Convert.ToDouble(value);
 
-                default:
-                    return Visibility.Collapsed;
-            }
+            return width > 0 && width < param;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
